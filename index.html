@@ -1,333 +1,399 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Undangan Wisuda Digital - NEXUS 2030">
-    <meta property="og:title" content="Undangan Wisuda - NEXUS 2030">
-    <meta property="og:description" content="Anda diundang ke acara wisuda kami">
-    <meta property="og:type" content="website">
-    <title>Undangan Wisuda · NEXUS 2030</title>
-    
-    <!-- Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
-    
-    <!-- Leaflet Map -->
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-    
-    <!-- Confetti -->
-    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.2/dist/confetti.browser.min.js"></script>
-    
-    <!-- Styles -->
-    <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Undangan Wisuda Digital 2030</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Segoe UI', 'Poppins', sans-serif;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: linear-gradient(-45deg, #0f0c29, #302b63, #24243e, #6a11cb, #2575fc);
+    background-size: 400% 400%;
+    animation: gradientBG 15s ease infinite;
+    overflow-x: hidden;
+    padding: 20px;
+  }
+
+  @keyframes gradientBG {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
+
+  .card {
+    position: relative;
+    width: 100%;
+    max-width: 480px;
+    background: rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 30px;
+    padding: 40px 30px;
+    text-align: center;
+    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.5),
+                0 0 80px rgba(106, 17, 203, 0.3);
+    animation: cardIn 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    opacity: 0;
+    transform: translateY(60px) scale(0.95);
+    overflow: hidden;
+  }
+
+  @keyframes cardIn {
+    to { opacity: 1; transform: translateY(0) scale(1); }
+  }
+
+  /* Efek kilau berjalan di border card */
+  .card::before {
+    content: '';
+    position: absolute;
+    top: -50%; left: -50%;
+    width: 200%; height: 200%;
+    background: conic-gradient(from 0deg, transparent, rgba(255,255,255,0.15), transparent 30%);
+    animation: shine 6s linear infinite;
+    pointer-events: none;
+  }
+  @keyframes shine {
+    to { transform: rotate(360deg); }
+  }
+
+  .card > * { position: relative; z-index: 2; }
+
+  /* ===== FOTO ===== */
+  .photo-wrap {
+    width: 150px;
+    height: 150px;
+    margin: 0 auto 25px;
+    position: relative;
+    animation: floatPhoto 4s ease-in-out infinite;
+  }
+
+  @keyframes floatPhoto {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+  }
+
+  .photo-ring {
+    position: absolute;
+    inset: -6px;
+    border-radius: 50%;
+    background: conic-gradient(#ff6ec4, #7873f5, #4ADEDE, #ff6ec4);
+    animation: spinRing 4s linear infinite;
+    filter: blur(2px);
+  }
+  @keyframes spinRing { to { transform: rotate(360deg); } }
+
+  .photo {
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 4px solid rgba(255,255,255,0.9);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+  }
+
+  .photo img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    animation: photoZoom 8s ease-in-out infinite alternate;
+  }
+  @keyframes photoZoom {
+    from { transform: scale(1); }
+    to { transform: scale(1.12); }
+  }
+
+  /* ===== TEKS ===== */
+  .tagline {
+    font-size: 0.75rem;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: #a8b3ff;
+    margin-bottom: 10px;
+    animation: fadeUp 1s 0.3s backwards;
+  }
+
+  .title {
+    font-size: 1.9rem;
+    font-weight: 800;
+    line-height: 1.2;
+    background: linear-gradient(90deg, #ff6ec4, #7873f5, #4ADEDE, #ff6ec4);
+    background-size: 300% 100%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: textFlow 5s linear infinite, fadeUp 1s 0.5s backwards;
+    margin-bottom: 6px;
+  }
+  @keyframes textFlow {
+    to { background-position: 300% 0; }
+  }
+
+  .year {
+    font-size: 3.2rem;
+    font-weight: 900;
+    letter-spacing: 6px;
+    color: rgba(255,255,255,0.95);
+    text-shadow: 0 0 25px rgba(120,115,245,0.9),
+                 0 0 50px rgba(255,110,196,0.6);
+    animation: glowPulse 2.5s ease-in-out infinite, fadeUp 1s 0.7s backwards;
+  }
+  @keyframes glowPulse {
+    0%, 100% { text-shadow: 0 0 25px rgba(120,115,245,0.9), 0 0 50px rgba(255,110,196,0.6); }
+    50% { text-shadow: 0 0 45px rgba(74,222,222,0.9), 0 0 80px rgba(255,110,196,0.9); }
+  }
+
+  .divider {
+    width: 60px;
+    height: 3px;
+    margin: 18px auto;
+    border-radius: 3px;
+    background: linear-gradient(90deg, transparent, #4ADEDE, #ff6ec4, transparent);
+    animation: fadeUp 1s 0.9s backwards;
+  }
+
+  .name {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #ffffff;
+    animation: fadeUp 1s 1.1s backwards;
+  }
+
+  .nim {
+    font-size: 0.85rem;
+    color: #b8c0ff;
+    letter-spacing: 2px;
+    margin-top: 4px;
+    animation: fadeUp 1s 1.2s backwards;
+  }
+
+  .desc {
+    font-size: 0.9rem;
+    line-height: 1.7;
+    color: rgba(255,255,255,0.75);
+    margin: 20px 0;
+    animation: fadeUp 1s 1.3s backwards;
+  }
+
+  /* ===== DETAIL ACARA ===== */
+  .details {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin: 22px 0;
+    animation: fadeUp 1s 1.5s backwards;
+  }
+
+  .detail-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: rgba(255,255,255,0.07);
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 14px;
+    padding: 12px 16px;
+    text-align: left;
+    transition: transform 0.3s, background 0.3s;
+  }
+  .detail-item:hover {
+    transform: translateX(5px);
+    background: rgba(255,255,255,0.13);
+  }
+
+  .detail-item .icon {
+    font-size: 1.3rem;
+    animation: bounce 2s ease-in-out infinite;
+  }
+  .detail-item:nth-child(2) .icon { animation-delay: 0.3s; }
+  .detail-item:nth-child(3) .icon { animation-delay: 0.6s; }
+
+  @keyframes bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-4px); }
+  }
+
+  .detail-item .label {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: #8b93d1;
+  }
+  .detail-item .value {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #fff;
+  }
+
+  /* ===== BUTTON ===== */
+  .btn {
+    display: inline-block;
+    margin-top: 10px;
+    padding: 14px 38px;
+    border: none;
+    border-radius: 50px;
+    font-size: 0.95rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+    color: #fff;
+    cursor: pointer;
+    background: linear-gradient(90deg, #ff6ec4, #7873f5, #4ADEDE);
+    background-size: 200% 100%;
+    box-shadow: 0 10px 30px rgba(120,115,245,0.5);
+    transition: all 0.3s ease;
+    animation: fadeUp 1s 1.7s backwards, btnGlow 3s ease-in-out infinite;
+    text-decoration: none;
+  }
+  .btn:hover {
+    background-position: 100% 0;
+    transform: translateY(-3px) scale(1.04);
+    box-shadow: 0 15px 40px rgba(255,110,196,0.7);
+  }
+  @keyframes btnGlow {
+    0%, 100% { box-shadow: 0 10px 30px rgba(120,115,245,0.5); }
+    50% { box-shadow: 0 10px 45px rgba(255,110,196,0.8); }
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(25px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ===== KONFETI ===== */
+  .confetti {
+    position: fixed;
+    top: -10px;
+    width: 10px;
+    height: 10px;
+    opacity: 0.9;
+    z-index: 1;
+    pointer-events: none;
+    animation: fall linear infinite;
+  }
+  @keyframes fall {
+    to { transform: translateY(105vh) rotate(720deg); }
+  }
+
+  /* Ornamen lingkaran cahaya */
+  .orb {
+    position: fixed;
+    border-radius: 50%;
+    filter: blur(80px);
+    opacity: 0.4;
+    z-index: 0;
+    pointer-events: none;
+  }
+  .orb1 { width: 300px; height: 300px; background: #6a11cb; top: -80px; left: -80px; animation: drift 12s ease-in-out infinite; }
+  .orb2 { width: 250px; height: 250px; background: #2575fc; bottom: -60px; right: -60px; animation: drift 15s ease-in-out infinite reverse; }
+  .orb3 { width: 200px; height: 200px; background: #ff6ec4; top: 40%; right: -100px; animation: drift 18s ease-in-out infinite; }
+
+  @keyframes drift {
+    0%, 100% { transform: translate(0, 0) scale(1); }
+    50% { transform: translate(40px, -40px) scale(1.2); }
+  }
+
+  @media (max-width: 400px) {
+    .title { font-size: 1.5rem; }
+    .year { font-size: 2.5rem; }
+    .card { padding: 30px 20px; }
+  }
+</style>
 </head>
 <body>
 
-    <!-- ========== PRELOADER ========== -->
-    <div id="preloader" class="preloader">
-        <div class="preloader-content">
-            <div class="boot-logo">◆ NEXUS 2030</div>
-            <div class="boot-line">
-                <span id="bootText">INITIALIZING NEXUS PROTOCOL...</span>
-            </div>
-            <div class="progress-bar">
-                <div id="progressFill" class="progress-fill"></div>
-            </div>
-            <div class="boot-percent">
-                <span id="progressText">0%</span>
-            </div>
-        </div>
+<!-- Ornamen cahaya -->
+<div class="orb orb1"></div>
+<div class="orb orb2"></div>
+<div class="orb orb3"></div>
+
+<!-- Kartu Undangan -->
+<div class="card">
+  <div class="photo-wrap">
+    <div class="photo-ring"></div>
+    <div class="photo">
+      <!-- Ganti src dengan foto wisudawan/wisudawati -->
+      <img src="https://images.unsplash.com/photo-1627556704302-624286467c65?w=400&q=80" alt="Foto Wisudawan">
     </div>
+  </div>
 
-    <!-- ========== MUSIC TOGGLE ========== -->
-    <button id="musicToggle" class="music-toggle" aria-label="Toggle Music">
-        <span class="music-icon">♪</span>
-    </button>
+  <p class="tagline">Undangan Wisuda</p>
+  <h1 class="title">Selamat Wisuda</h1>
+  <div class="year">2030</div>
 
-    <!-- ========== MAIN CONTENT ========== -->
-    <main id="app" class="app">
+  <div class="divider"></div>
 
-        <!-- HERO -->
-        <section class="section hero" id="hero">
-            <canvas id="particles"></canvas>
-            <div class="hero-content">
-                <div class="hero-label">◆ THE INVITATION ◆</div>
-                <p class="hero-greeting">Kepada Yth.</p>
-                <h1 class="hero-name" id="guestName">—</h1>
-                <p class="hero-subtitle">Anda diundang ke acara wisuda</p>
-                <h2 class="hero-title" id="graduateName">—</h2>
-                <div class="scroll-hint">
-                    <span>Scroll untuk membuka</span>
-                    <div class="scroll-arrow">↓</div>
-                </div>
-            </div>
-        </section>
+  <h2 class="name">Nama Wisudawan</h2>
+  <p class="nim">NIM. 2030123456</p>
 
-        <!-- OPENING VERSE -->
-        <section class="section verse" id="verse">
-            <div class="container">
-                <div class="verse-icon">✦</div>
-                <p class="verse-text" id="openingVerse">—</p>
-                <p class="verse-source" id="openingVerseSource">—</p>
-            </div>
-        </section>
+  <p class="desc">
+    Dengan penuh rasa syukur dan bangga, kami mengundang Anda untuk hadir
+    dalam momen istimewa perayaan kelulusan kami.
+  </p>
 
-        <!-- PROFILE -->
-        <section class="section profile" id="profile">
-            <div class="container">
-                <div class="section-header reveal">
-                    <span class="label">◆ PROFIL</span>
-                    <h2>Wisudawan</h2>
-                </div>
-                <div class="profile-card reveal">
-                    <div class="profile-photo-wrap">
-                        <div class="profile-photo-ring"></div>
-                        <img id="profilePhoto" src="" alt="Foto Wisudawan" class="profile-photo">
-                    </div>
-                    <div class="profile-info">
-                        <h3 id="profileName">—</h3>
-                        <p id="profileDegree" class="profile-degree">—</p>
-                        <p id="profileMajor" class="profile-major">—</p>
-                        <div class="profile-stats">
-                            <div class="stat">
-                                <span class="stat-label">Universitas</span>
-                                <span class="stat-value" id="profileUniv">—</span>
-                            </div>
-                            <div class="stat">
-                                <span class="stat-label">Angkatan</span>
-                                <span class="stat-value" id="profileYear">—</span>
-                            </div>
-                            <div class="stat">
-                                <span class="stat-label">IPK</span>
-                                <span class="stat-value" id="profileGpa">—</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
+  <div class="details">
+    <div class="detail-item">
+      <span class="icon">📅</span>
+      <div>
+        <div class="label">Hari / Tanggal</div>
+        <div class="value">Sabtu, 15 Juni 2030</div>
+      </div>
+    </div>
+    <div class="detail-item">
+      <span class="icon">⏰</span>
+      <div>
+        <div class="label">Waktu</div>
+        <div class="value">08.00 WIB - Selesai</div>
+      </div>
+    </div>
+    <div class="detail-item">
+      <span class="icon">📍</span>
+      <div>
+        <div class="label">Tempat</div>
+        <div class="value">Auditorium Universitas Nusantara</div>
+      </div>
+    </div>
+  </div>
 
-        <!-- EVENT & COUNTDOWN -->
-        <section class="section event" id="event">
-            <div class="container">
-                <div class="section-header reveal">
-                    <span class="label">◆ ACARA</span>
-                    <h2>Save the Date</h2>
-                </div>
-                <div class="event-grid reveal">
-                    <div class="event-card">
-                        <div class="event-icon">📅</div>
-                        <span class="event-label">Tanggal</span>
-                        <span class="event-value" id="eventDate">—</span>
-                    </div>
-                    <div class="event-card">
-                        <div class="event-icon">🕐</div>
-                        <span class="event-label">Waktu</span>
-                        <span class="event-value" id="eventTime">—</span>
-                    </div>
-                    <div class="event-card">
-                        <div class="event-icon">👔</div>
-                        <span class="event-label">Dress Code</span>
-                        <span class="event-value" id="eventDress">—</span>
-                    </div>
-                </div>
-                <div class="countdown reveal">
-                    <div class="countdown-label">Menuju hari bahagia</div>
-                    <div class="countdown-grid">
-                        <div class="countdown-item">
-                            <span id="cdDays" class="countdown-num">00</span>
-                            <span class="countdown-txt">Hari</span>
-                        </div>
-                        <div class="countdown-item">
-                            <span id="cdHours" class="countdown-num">00</span>
-                            <span class="countdown-txt">Jam</span>
-                        </div>
-                        <div class="countdown-item">
-                            <span id="cdMinutes" class="countdown-num">00</span>
-                            <span class="countdown-txt">Menit</span>
-                        </div>
-                        <div class="countdown-item">
-                            <span id="cdSeconds" class="countdown-num">00</span>
-                            <span class="countdown-txt">Detik</span>
-                        </div>
-                    </div>
-                </div>
-                <button id="addCalendar" class="btn-primary reveal">📅 Tambah ke Kalender</button>
-            </div>
-        </section>
+  <a href="#" class="btn" onclick="alert('Terima kasih! Sampai jumpa di hari wisuda 🎓✨'); return false;">
+    Konfirmasi Kehadiran
+  </a>
+</div>
 
-        <!-- LOCATION -->
-        <section class="section location" id="location">
-            <div class="container">
-                <div class="section-header reveal">
-                    <span class="label">◆ LOKASI</span>
-                    <h2 id="venueName">Rumah Kami</h2>
-                </div>
-                <div class="location-grid reveal">
-                    <div class="map-wrapper">
-                        <div id="map"></div>
-                    </div>
-                    <div class="location-info">
-                        <div class="info-item">
-                            <span class="info-icon">📍</span>
-                            <div>
-                                <span class="info-label">Alamat</span>
-                                <p id="venueAddress">—</p>
-                            </div>
-                        </div>
-                        <div class="info-item">
-                            <span class="info-icon">📌</span>
-                            <div>
-                                <span class="info-label">Patokan</span>
-                                <p id="venueLandmark">—</p>
-                            </div>
-                        </div>
-                        <div class="info-item">
-                            <span class="info-icon">🅿️</span>
-                            <div>
-                                <span class="info-label">Parkir</span>
-                                <p id="venueParking">—</p>
-                            </div>
-                        </div>
-                        <div class="location-buttons">
-                            <a id="gmapsLink" href="#" target="_blank" class="btn-secondary">🗺️ Google Maps</a>
-                            <a id="wazeLink" href="#" target="_blank" class="btn-secondary">🧭 Waze</a>
-                            <button id="copyAddress" class="btn-secondary">📋 Copy Alamat</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
+<script>
+  // ===== Konfeti jatuh =====
+  const colors = ['#ff6ec4', '#7873f5', '#4ADEDE', '#ffd93d', '#ffffff', '#ff8fab'];
+  function createConfetti() {
+    const c = document.createElement('div');
+    c.classList.add('confetti');
+    c.style.left = Math.random() * 100 + 'vw';
+    c.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+    c.style.width = (Math.random() * 8 + 6) + 'px';
+    c.style.height = (Math.random() * 8 + 6) + 'px';
+    c.style.borderRadius = Math.random() > 0.5 ? '50%' : '2px';
+    const duration = Math.random() * 3 + 4;
+    c.style.animationDuration = duration + 's';
+    c.style.animationDelay = Math.random() * 2 + 's';
+    document.body.appendChild(c);
+    setTimeout(() => c.remove(), (duration + 2) * 1000);
+  }
+  setInterval(createConfetti, 250);
 
-        <!-- RUNDOWN -->
-        <section class="section rundown" id="rundown">
-            <div class="container">
-                <div class="section-header reveal">
-                    <span class="label">◆ SUSUNAN ACARA</span>
-                    <h2>Rundown</h2>
-                </div>
-                <div class="timeline reveal" id="timeline"></div>
-            </div>
-        </section>
+  // ===== Efek parallax ringan pada kartu =====
+  const card = document.querySelector('.card');
+  document.addEventListener('mousemove', (e) => {
+    const x = (e.clientX / window.innerWidth - 0.5) * 8;
+    const y = (e.clientY / window.innerHeight - 0.5) * 8;
+    card.style.transform = `perspective(1000px) rotateY(${x}deg) rotateX(${-y}deg)`;
+  });
+  document.addEventListener('mouseleave', () => {
+    card.style.transform = 'perspective(1000px) rotateY(0) rotateX(0)';
+  });
+</script>
 
-        <!-- GALLERY -->
-        <section class="section gallery" id="gallery">
-            <div class="container">
-                <div class="section-header reveal">
-                    <span class="label">◆ GALERI</span>
-                    <h2>Kenangan</h2>
-                </div>
-                <div class="gallery-grid reveal" id="galleryGrid"></div>
-            </div>
-        </section>
-
-        <!-- RSVP -->
-        <section class="section rsvp" id="rsvp">
-            <div class="container">
-                <div class="section-header reveal">
-                    <span class="label">◆ KONFIRMASI</span>
-                    <h2>RSVP</h2>
-                </div>
-                <form id="rsvpForm" class="rsvp-form reveal">
-                    <div class="form-group">
-                        <label for="rsvpName">Nama Anda</label>
-                        <input type="text" id="rsvpName" name="name" required placeholder="Nama lengkap">
-                    </div>
-                    <div class="form-group">
-                        <label>Kehadiran</label>
-                        <div class="radio-group">
-                            <label class="radio-btn">
-                                <input type="radio" name="attendance" value="hadir" checked>
-                                <span>✓ Hadir</span>
-                            </label>
-                            <label class="radio-btn">
-                                <input type="radio" name="attendance" value="ragu">
-                                <span>~ Ragu</span>
-                            </label>
-                            <label class="radio-btn">
-                                <input type="radio" name="attendance" value="tidak">
-                                <span>✗ Tidak</span>
-                            </label>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label for="rsvpCount">Jumlah Tamu</label>
-                        <input type="number" id="rsvpCount" name="count" min="1" max="10" value="1">
-                    </div>
-                    <div class="form-group">
-                        <label for="rsvpMessage">Ucapan & Doa</label>
-                        <textarea id="rsvpMessage" name="message" rows="4" placeholder="Tulis ucapan..."></textarea>
-                    </div>
-                    <button type="submit" class="btn-primary">Kirim Konfirmasi</button>
-                </form>
-            </div>
-        </section>
-
-        <!-- DIGITAL GIFT -->
-        <section class="section gift" id="gift">
-            <div class="container">
-                <div class="section-header reveal">
-                    <span class="label">◆ HADIAH</span>
-                    <h2>Digital Gift</h2>
-                </div>
-                <p class="gift-note reveal">Kehadiran & doa Anda adalah hadiah terindah. Namun jika ingin memberi tanda kasih:</p>
-                <div class="gift-grid reveal" id="giftGrid"></div>
-            </div>
-        </section>
-
-        <!-- WISHES WALL -->
-        <section class="section wishes" id="wishes">
-            <div class="container">
-                <div class="section-header reveal">
-                    <span class="label">◆ UCAPAN</span>
-                    <h2>Wishes Wall</h2>
-                </div>
-                <div class="wishes-grid reveal" id="wishesGrid"></div>
-            </div>
-        </section>
-
-        <!-- CONTACT -->
-        <section class="section contact" id="contact">
-            <div class="container">
-                <div class="section-header reveal">
-                    <span class="label">◆ KONTAK</span>
-                    <h2>Hubungi Kami</h2>
-                </div>
-                <div class="contact-grid reveal" id="contactGrid"></div>
-            </div>
-        </section>
-
-        <!-- THANK YOU -->
-        <section class="section thanks" id="thanks">
-            <div class="container">
-                <div class="thanks-content reveal">
-                    <div class="thanks-icon">🙏</div>
-                    <h2>Terima Kasih</h2>
-                    <p id="thanksMessage">—</p>
-                    <p class="thanks-sign">Kami yang berbahagia,<br><strong id="thanksSign">—</strong></p>
-                    <div class="thanks-actions">
-                        <button id="shareBtn" class="btn-primary">📤 Bagikan</button>
-                        <button id="copyLinkBtn" class="btn-secondary">🔗 Copy Link</button>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- FOOTER -->
-        <footer class="footer">
-            <p>◆ NEXUS 2030 ◆</p>
-            <p class="footer-small">Undangan digital dibuat dengan ❤️</p>
-            <p class="footer-small">© 2030 <span id="footerName">—</span></p>
-        </footer>
-    </main>
-
-    <!-- TOAST -->
-    <div id="toast" class="toast"></div>
-
-    <!-- Scripts -->
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-    <script src="script.js"></script>
 </body>
 </html>
